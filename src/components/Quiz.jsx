@@ -74,10 +74,10 @@ export default function Quiz() {
         <h2>{QUESTIONS[activeQuestionIndex]?.text}</h2>
         {/* list of answers for the active question */}
         <ul id="answers">
-          {shuffledAnswers.map((answer, index) => {
+          {shuffledAnswers.map((answer) => {
             const isSelected = userAnswers[userAnswers.length - 1] === answer;
             let cssClasses = "";
-            if (answerState === "answer" && isSelected) {
+            if (answerState === "answered" && isSelected) {
               cssClasses = "selected";
             }
             if (
@@ -87,7 +87,7 @@ export default function Quiz() {
               cssClasses = answerState;
             }
             return (
-              <li key={index} className="answer">
+              <li key={answer} className="answer">
                 {/*
                 We wrap handleSelectAnswer in an arrow function so it is NOT called while React renders.
                 Writing onClick={handleSelectAnswer(answer)}
