@@ -2,9 +2,9 @@ import { useState, useCallback } from "react";
 import QUESTIONS from "../questions.js";
 import QuestionTimer from "./QuestionTimer.jsx";
 import quizCompleteImage from "../assets/quiz-complete.png";
+import Answers from "./Answers.jsx";
 
 export default function Quiz() {
-  //Questions
   // const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   // user Answers will also store which question was answered and what answer was selected
   const [userAnswers, setUserAnswers] = useState([]);
@@ -58,9 +58,6 @@ export default function Quiz() {
     );
   }
 
-  // the default file has the 1st answer as correct, so we need to shuffle the answers so that the correct answer is not always the first one. We can do this by shuffling the answers array for each question. CREATE NEW array to preserve default order of answers file. We can use the spread operator to create a new array and then use the sort method to shuffle the answers. The sort method takes a compare function that returns a random number between -0.5 and 0.5, which will randomly sort the answers.
-  const shuffledAnswers = [...QUESTIONS[activeQuestionIndex].answers];
-  shuffledAnswers.sort(() => Math.random() - 0.5);
   //determine when the quiz is complete
 
   return (
@@ -72,42 +69,13 @@ export default function Quiz() {
           onTimeOut={handleSkipAnswer}
         />
         <h2>{QUESTIONS[activeQuestionIndex]?.text}</h2>
-        {/* list of answers for the active question */}
-        <ul id="answers">
-          {shuffledAnswers.map((answer) => {
-            const isSelected = userAnswers[userAnswers.length - 1] === answer;
-            let cssClasses = "";
-            if (answerState === "answered" && isSelected) {
-              cssClasses = "selected";
-            }
-            if (
-              (answerState === "correct" || answerState === "wrong") &&
-              isSelected
-            ) {
-              cssClasses = answerState;
-            }
-            return (
-              <li key={answer} className="answer">
-                {/*
-                We wrap handleSelectAnswer in an arrow function so it is NOT called while React renders.
-                Writing onClick={handleSelectAnswer(answer)}
-                would execute the function immediately on every render (and update state, causing an infinite loop).
-                The arrow function is a new
-                function that React stores and only runs when the button is clicked.
-                It also lets us pass the `answer` from this map iteration as an argument,
-                which we couldn't do with onClick={handleSelectAnswer}
-                because React would pass the click event instead.
-              */}
-                <button
-                  onClick={() => handleSelectAnswer(answer)}
-                  className={cssClasses}
-                >
-                  {answer}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+        <Answers
+          key={`answers-${activeQuestionIndex}`}
+          answers={QUESTIONS[activeQuestionIndex].answers}
+          answerState={answerState}
+          selectedAnswer={userAnswers[userAnswers.length - 1]}
+          onSelect={handleSelectAnswer}
+        />
       </div>
     </div>
   );
