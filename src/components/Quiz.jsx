@@ -4,47 +4,21 @@ import quizCompleteImage from "../assets/quiz-complete.png";
 import Question from "./Question.jsx";
 
 export default function Quiz() {
-  //usestate to store an OBJ
-  const [answer, setAnswer] = useState({
-    selectedAnswer: "",
-    isCorrect: null,
-  });
   //usestate function
-  // const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   // user Answers will also store which question was answered and what answer was selected
   const [userAnswers, setUserAnswers] = useState([]);
-  // answer state ('', 'answered', 'correct', 'wrong') used to color the selected answer button
-  const [answerState, setAnswerState] = useState("");
-  // current answer state
-  const [currentAnswer, setCurrentAnswer] = useState("");
   // user active question index will be derived from the index of the answer that user has selected.
-  const activeQuestionIndex =
-    answerState === "" ? userAnswers.length : userAnswers.length - 1;
+  const activeQuestionIndex = userAnswers.length;
   //checking if quiz complete
   const isQuizComplete = activeQuestionIndex === QUESTIONS.length;
   //.
   //update the answers array when user selects an answer
   const handleSelectAnswer = useCallback(
     (selectedAnswer) => {
-      //change answer button color to indicate selection
-      setAnswerState("answered");
       // store the answer in the userAnswers array
       setUserAnswers((prevUserAnswers) => [...prevUserAnswers, selectedAnswer]);
-      // set timeout to reset the answerState and currentAnswer - did user select the correct answer?
-      setTimeout(() => {
-        if (selectedAnswer === QUESTIONS[activeQuestionIndex].answers[0]) {
-          setAnswerState("correct");
-        } else {
-          setAnswerState("wrong");
-        }
-
-        setTimeout(() => {
-          setAnswerState("");
-          setCurrentAnswer("");
-        }, 2000);
-      }, 1000);
     },
-    [activeQuestionIndex],
+    [],
   );
 
   const handleSkipAnswer = useCallback(() => {
@@ -69,10 +43,7 @@ export default function Quiz() {
     <div id="quiz">
       <Question
         key={activeQuestionIndex}
-        questionText={QUESTIONS[activeQuestionIndex]?.text}
-        answers={QUESTIONS[activeQuestionIndex].answers}
-        answerState={answerState}
-        selectedAnswer={userAnswers[userAnswers.length - 1]}
+        index={activeQuestionIndex}
         onSelectAnswer={handleSelectAnswer}
         onSkipAnswer={handleSkipAnswer}
       />
