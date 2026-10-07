@@ -4,6 +4,12 @@ import quizCompleteImage from "../assets/quiz-complete.png";
 import Question from "./Question.jsx";
 
 export default function Quiz() {
+  //usestate to store an OBJ
+  const [answer, setAnswer] = useState({
+    selectedAnswer: "",
+    isCorrect: null,
+  });
+  //usestate function
   // const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   // user Answers will also store which question was answered and what answer was selected
   const [userAnswers, setUserAnswers] = useState([]);

@@ -1,5 +1,6 @@
 import QuestionTimer from "./QuestionTimer.jsx";
 import Answers from "./Answers.jsx";
+import { useState } from "react";
 
 export default function Question({
   questionText,
@@ -9,6 +10,11 @@ export default function Question({
   answerState,
   onSkipAnswer,
 }) {
+  //usestate to store an OBJ
+  const [answer, setAnswer] = useState({
+    selectedAnswer: "",
+    isCorrect: null,
+  });
   return (
     <div id="question">
       <QuestionTimer timeOut={10000} onTimeOut={onSkipAnswer} />
